@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "LinkDrop",
+    "version": "1.0",
+    "description": "Send links to other devices",
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "LinkDrop"
+    },
+    "permissions": ["tabs"],
+    "host_permissions": ["http://localhost:3000/*"]
+  }
