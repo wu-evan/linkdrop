@@ -6,6 +6,8 @@ interface NavbarProps {
 
 export default function Queue({ deviceId }: NavbarProps) {
     const [queue, setQueue] = useState<any[]>([]);
+    const [message, setMessage] = useState<string | null>(null);
+    const [messageType, setMessageType] = useState<"success" | "error" | "warning" | null>(null);
 
     useEffect(() => {
         fetch(`http://localhost:3000/api/links?deviceId=${encodeURIComponent(deviceId)}`, {
@@ -15,14 +17,24 @@ export default function Queue({ deviceId }: NavbarProps) {
         .then(async res => {
             const data = await res.json();
             if (!res.ok) {
-                alert(data.error || 'Failed to fetch queue');
+                setMessage(data.error || 'Failed to fetch queue');
+                setMessageType('error');
+                setTimeout(() => {
+                    setMessage(null);
+                    setMessageType(null);
+                }, 2000);
             } else {
                 setQueue(data);
                 console.log("Queue data:", data);
             }
         })
         .catch(() => {
-            alert('Network error. Please try again.');
+            setMessage('Network error. Please try again.');
+            setMessageType('error');
+            setTimeout(() => {
+                setMessage(null);
+                setMessageType(null);
+            }, 2000);
         });
     }, [deviceId]);
 
@@ -35,21 +47,36 @@ export default function Queue({ deviceId }: NavbarProps) {
          .then(async res => {
             const data = await res.json();
             if (!res.ok) {
-                alert(data.error || 'Failed to delete link');
+                setMessage(data.error || 'Failed to delete link');
+                setMessageType('error');
+                  setTimeout(() => {
+                    setMessage(null);
+                    setMessageType(null);
+                }, 2000);
             } else {
                 setQueue(data);
             }
         })
         .catch(() => {
-            alert('Network error. Please try again.');
+            setMessage('Network error. Please try again.');
+            setMessageType('error');
+            setTimeout(() => {
+                setMessage(null);
+                setMessageType(null);
+            }, 2000);
         });
     }
 
     return (
         <div className="px-5">
             <h2 className="text-2xl font-bold mb-4 text-center mt-[1rem]">Queue</h2>
+            {message && (
+                    <div className={`alert mb-[0.5rem] ${messageType === 'success' ? 'alert-success' : messageType === 'error' ? 'alert-error' : 'alert-warning'}`}>
+                        <span>{message}</span>
+                    </div>
+            )}
             <div
-                className="flex flex-col bg-gray-100 gap-4 overflow-y-auto rounded-md"
+                className="flex flex-col bg-gray-100 gap-4 overflow-y-auto rounded-md pb-[5rem]"
                 style={{ maxHeight: "340px"}}
             >
                 {queue.map((item, idx) => (

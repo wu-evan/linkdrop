@@ -54,15 +54,24 @@ export default function Send({ deviceId }: NavbarProps) {
                 setMessageType('success');
                 setUrl('');
                 setRecipientDeviceId('');
+                setTimeout(() => {
+                    setMessage(null);
+                    setMessageType(null);
+                }, 2000);
             }
         })
         .catch(() => {
             setIsSending(false);
             setMessage('Network error. Please try again.');
             setMessageType('error');
+            setTimeout(() => {
+                setMessage(null);
+                setMessageType(null);
+            }, 2000);
         });
     }
 
+    // Add loading spinner when sending
     if (isSending) {
         return (
             <div className="flex flex-col items-center justify-center h-full">
