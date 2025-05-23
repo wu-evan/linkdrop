@@ -29,9 +29,8 @@ export default function Send({ deviceId }: NavbarProps) {
         }
 
         // URL validation
-        try {
-            new URL(trimmedUrl);
-        } catch {
+        const regex = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+        if (!regex.test(trimmedUrl)) {
             setMessage('Please enter a valid URL.');
             setMessageType('warning');
             return;

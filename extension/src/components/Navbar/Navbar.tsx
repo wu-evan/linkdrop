@@ -5,9 +5,10 @@ type View = "send" | "queue";
 interface NavbarProps {
   setView: React.Dispatch<React.SetStateAction<View>>;
   deviceId: string | null;
+  unreadCount: number;
 }
 
-export default function Navbar({setView, deviceId}: NavbarProps) {
+export default function Navbar({setView, deviceId, unreadCount}: NavbarProps) {
 
     const renderSend = () => {
         setView("send");
@@ -26,6 +27,12 @@ export default function Navbar({setView, deviceId}: NavbarProps) {
             <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
+                    {unreadCount > 0 && (
+                        <span
+                            className="absolute top-0 right-0 w-2 h-2 rounded-full bg-red-500"
+                            style={{ transform: "translate(25%, -25%)" }}
+                        ></span>
+                    )}
                 </div>
                 <ul
                     tabIndex={0}

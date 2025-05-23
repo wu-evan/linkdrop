@@ -127,7 +127,8 @@ app.get('/api/links', async (req, res) => {
       senderId: link.senderId,
       url: link.url,
       sentAt: link.sentAt,
-      linkId: link._id.toString()
+      linkId: link._id.toString(),
+      unread: link.unread
     }));
     res.json(links);
   } catch (err) {
@@ -154,7 +155,8 @@ app.delete('/api/links', async (req, res) => {
       senderId: link.senderId,
       url: link.url,
       sentAt: link.sentAt,
-      linkId: link._id.toString()
+      linkId: link._id.toString(),
+      unread: link.unread
     }));
     res.json(links);
   } catch (err) {
@@ -163,5 +165,25 @@ app.delete('/api/links', async (req, res) => {
   }
 
 });
+
+// Mark all links as read
+app.post('/api/read', async (req, res) => {
+  const { deviceId } = req.body;
+  if (!deviceId ) {
+    return res.status(400).json({ error: 'device ID required' });
+  }
+  try {
+    await Device.updateOne(
+      { deviceId },
+      { $set: { "links.$[].unread": false } }
+    );
+    res.json({ message: 'All links marked as read' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+
+});
+
 
 app.listen(3000, () => console.log('Server on http://localhost:3000'));

@@ -7,7 +7,8 @@ const DeviceSchema = new mongoose.Schema({
     {
       senderId: { type: String, required: true },
       url: { type: String, required: true },
-      sentAt: { type: Date, default: Date.now }
+      sentAt: { type: Date, default: Date.now },
+      unread: { type: Boolean, default: true }
     }
   ]
 });
